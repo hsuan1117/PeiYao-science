@@ -1,0 +1,3 @@
+C:\Users\Yahui\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\203.6682.181\bin\cmake\win\bin\cmake.exe -E rm -f CMakeFiles\Science.dir/objects.a
+"D:\Program Files (x86)\Dev-Cpp\MinGW64\bin\ar.exe" cr CMakeFiles\Science.dir/objects.a @CMakeFiles\Science.dir\objects1.rsp
+"D:\Program Files (x86)\Dev-Cpp\MinGW64\bin\g++.exe" -g   -Wl,--whole-archive CMakeFiles\Science.dir/objects.a -Wl,--no-whole-archive  -o Science.exe -Wl,--out-implib,libScience.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Science.dir\linklibs.rsp

@@ -1,0 +1,3 @@
+D:/GithubProject/Science/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+D:/GithubProject/Science/cmake-build-debug/CMakeFiles/Science.dir
+D:/GithubProject/Science/cmake-build-debug/CMakeFiles/edit_cache.dir
