@@ -1,3 +1,4 @@
+
 #include <SoftwareSerial.h>
 #include <Stepper.h>
 /* File: GetMax
@@ -8,7 +9,6 @@
 
 /**
    旋轉延時 <br>
-
    值越小轉越快，太小會轉不動
  * */
 const int ROTATE_DELAY = 2;
@@ -18,14 +18,11 @@ const int MOTOR_STEP   = 2048;
 
 /**
    亮度感測器 <br>
-
    <li><b>8</b> CT ==> uart_tx(mode 1)</li>
    <li><b>9</b> DR ==> uart_rx(mode 1)</li>
    接口和arduino的 rx tx 要相反
-
    @param rx : int 接收資料端口
    @param tx : int 重送資料端口
-
    @see <a href="https://www.arduino.cc/en/Reference/SoftwareSerialConstructor">說明文件</a>
  **/
 SoftwareSerial light(10, 9);
@@ -60,15 +57,13 @@ class GY39 {
     static const byte FRAME_DATATYPE_IIC = 0x55;
 
     /***
-
-
        @see
         <a href="https://www.taiwaniot.com.tw/wp-content/uploads/woocommerce_uploads/2016/10/GY39_manual.pdf" >GY39 說明文件</a>
        @return
     */
     static double calculate() {
       int start;
-      //delay(10);
+      delay(100);
 
       //尋找資料起始點
       for (int i = 0; i < 26; ++i) {
@@ -124,7 +119,7 @@ void setup() {
   Serial.begin(115200);
   light.begin(9600);
 
-  motor.setSpeed(5);
+  motor.setSpeed(4096);
   digitalWrite(11, HIGH);
   digitalWrite(8, LOW);
 
@@ -164,7 +159,7 @@ void loop() {
         m = min(m, result);
       }
       
-      motor.step(1);
+      motor.step(1);  
     }
 
 
