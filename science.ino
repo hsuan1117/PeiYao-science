@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include <Stepper.h>
-/* Copyright (c) 2021 Hsuan,Wei
+/* File: GetMax
+ * Copyright (c) 2021 Hsuan,Wei
    For more details, see https://www.sivir.pw , https://hsuan.app
    Released under the MIT license.
  * */
@@ -147,6 +148,7 @@ void loop() {
 
     double M = -1.0;
     double m = 0x3f3f3f3f;
+    int gear = -1;
     for (int i = 1; i <= iipt; i++) {
       Serial.print("[Info] Time: ");
       Serial.println(millis());
@@ -154,6 +156,9 @@ void loop() {
       
       Device.read_data();
       double result = Device.calculate();
+      if(result > M){
+          gear = iipt / MOTOR_STEP;
+      }
       M = max(M, result);
       if(result > 0.0){
         m = min(m, result);
@@ -166,7 +171,7 @@ void loop() {
     Serial.print("\n");
 
     Serial.print("Gear: ");
-    Serial.print(iipt);
+    Serial.print(gear);
     Serial.print("\n");
 
     Serial.print("Lux min: ");
