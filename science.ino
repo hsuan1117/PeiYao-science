@@ -79,14 +79,14 @@ class GY39 {
         }
       }
 
-      delay(100);
+      //delay(100);
       if (data[start + 2] == FRAME_DATATYPE_LIGHT) {
         Serial.println("[Info] DataType: Light");
         verify_data(8, start);
 
         Serial.print("[Info] Light = ");
         double lux = (data[start + 4] << 24) + (data[start + 5] << 16) + (data[start + 6] << 8) + (data[start + 7]);
-        Serial.println(lux / 100);
+        Serial.println(abs(lux / 100.0));
         return abs(lux / 100.0);
 
       } else {
@@ -157,7 +157,7 @@ void loop() {
       Device.read_data();
       double result = Device.calculate();
       if(result > M){
-          gear = i*360.0/2048.0;
+          gear = i;
       }
       M = max(M, result);
       if(result > 0.0){
