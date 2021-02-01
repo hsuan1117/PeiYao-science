@@ -1,4 +1,5 @@
 #include <SoftwareSerial.h>
+#include <Stepper.h>
 /* Copyright (c) 2021 Hsuan,Wei
  * For more details, see https://www.sivir.pw , https://hsuan.app
  * Released under the MIT license.
@@ -35,38 +36,15 @@ byte data[32];
  *  - 轉一圈，偵測最大值
  *  - 手動輸入角度，轉到該腳開始檢測亮度
  * */
-namespace ArduinoToolKit {
-    enum class LogType {
-        Info, Error, Debug
-    };
-
-    void log(LogType type, string msg) {
-        switch (type) {
-            case LogType::Info:
-                Serial.println("[Info] " + msg);
-                break;
-            case LogType::Error:
-                Serial.println("[Error] " + msg);
-                break;
-            case LogType::Debug:
-                Serial.println("[Error] " + msg);
-                break;
-            default:
-                Serial.println("[Unknown] " + msg);
-        }
-
-    }
-}
-
 class GY39 {
 
 private:
-    static bool verify_data(int length, int start,*byte frame) {
+    static bool verify_data(int length, int start) {
         byte btmp = 0;
         for (int i = 0; i < length; ++i) {
-            btmp += *frame[start + i];
+            btmp += data[start + i];
         }
-        if (btmp == *frame[start + length - 1])
+        if (btmp == data[start + length - 1])
             return true;
         return false;
     }
@@ -84,13 +62,13 @@ public:
      *  <a href="https://www.taiwaniot.com.tw/wp-content/uploads/woocommerce_uploads/2016/10/GY39_manual.pdf" >GY39 說明文件</a>
      * @return
      */
-    static double calculate(*byte frame) {
+    static double calculate() {
         int start;
         delay(10);
 
         //尋找資料起始點
         for (int i = 0; i < 26; ++i) {
-            if (*frame[i] == FRAME_FLAG && *frame[i + 1] == FRAME_FLAG) {
+            if (data[i] == FRAME_FLAG && data[i + 1] == FRAME_FLAG) {
                 Serial.println("[Info] Got sensor data.");
                 start = i;
                 break;
@@ -98,12 +76,12 @@ public:
         }
 
         delay(100);
-        if (*frame[start + 2] == FRAME_DATATYPE_LIGHT) {
+        if (data[start + 2] == FRAME_DATATYPE_LIGHT) {
             Serial.println("[Info] DataType: Light");
             verify_data(8, start);
 
             Serial.println("[Info] Light = ");
-            double lux = (*frame[start + 4] << 24) + (*frame[start + 5] << 16) + (*frame[start + 6] << 8) + (*frame[start + 7]);
+            double lux = (data[start + 4] << 24) + (data[start + 5] << 16) + (data[start + 6] << 8) + (data[start + 7]);
             Serial.print(lux / 100);
             return lux;
 
@@ -112,17 +90,17 @@ public:
         }
     }
 
-    void read_data(*byte frame) {
+    void read_data() {
         for (int i = 0; i < 25; ++i) {
-            frame[i] = light.read();
-            Serial.print(*frame[i]);
+            data[i] = light.read();
+            Serial.print(light.read());
             Serial.print(" ");
         }
     }
 
 
 };
-
+GY39 Device;
 
 void stepForward();
 
@@ -166,14 +144,14 @@ void loop() {
         int M = -1;
         for (int i = 1; i <= input; i++) {
             stepForward();
-            GY39::read_data(*data);
-            M = max(M,GY39::calculate());
+            Device.read_data();
+            M = max(M,Device.calculate());
         }
 
 
         Serial.print("\n");
 
-        double val = GY39::calculate();
+        double val = Device.calculate();
         Serial.print("Gear: ");
         Serial.print(input);
         Serial.print("\n");
