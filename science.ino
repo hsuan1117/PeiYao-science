@@ -148,7 +148,7 @@ void loop() {
 
     double M = -1.0;
     double m = 0x3f3f3f3f;
-    int gear = -1;
+    double gear = -1;
     for (int i = 1; i <= iipt; i++) {
       Serial.print("[Info] Time: ");
       Serial.println(millis());
@@ -157,7 +157,7 @@ void loop() {
       Device.read_data();
       double result = Device.calculate();
       if(result > M){
-          gear = iipt / MOTOR_STEP;
+          gear = i*360.0/2048.0;
       }
       M = max(M, result);
       if(result > 0.0){
