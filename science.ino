@@ -149,7 +149,7 @@ void loop() {
     double M = -1.0;
     double m = 0x3f3f3f3f;
     double gear = -1;
-    for (int i = 1; i <= iipt; i++) {
+    for (int i = 1; i <= 2048; i++) {
       Serial.print("[Info] Time: ");
       Serial.println(millis());
       //stepForward();
